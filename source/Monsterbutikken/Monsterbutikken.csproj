@@ -136,7 +136,7 @@
     <Compile Include="Models\MonsterJson.cs" />
     <Compile Include="Models\BasketItemJson.cs" />
     <Compile Include="Models\OrderLineItemJson.cs" />
-    <Compile Include="Monsters.cs" />
+    <Compile Include="MosterTypeRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

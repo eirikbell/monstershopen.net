@@ -42,7 +42,7 @@ namespace Monsterbutikken.Controllers.Service
 
             if (ordreLinje == null)
             {
-                var monster = Monsters.GetMonster(name);
+                var monster = MosterTypeRepo.GetMonster(name);
                 if (monster == null)
                     return BadRequest();
 

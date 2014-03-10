@@ -14,7 +14,7 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public IEnumerable<MonsterJson> Get()
         {
-            return Monsters.MonsterList;
+            return MosterTypeRepo.MonsterList;
         }
     }
 }

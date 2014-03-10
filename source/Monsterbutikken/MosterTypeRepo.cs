@@ -4,7 +4,7 @@ using Monsterbutikken.Models;
 
 namespace Monsterbutikken
 {
-    public static class Monsters
+    public static class MosterTypeRepo
     {
         public static IEnumerable<MonsterJson> MonsterList
         {
