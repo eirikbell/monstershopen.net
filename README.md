@@ -69,5 +69,5 @@ Note that there are multiple patterns for event sourcing, the above being one of
 ### Resources
 
 * monstershopen java: https://github.com/andreasBerre/monstershopen
-* monstershopen c#: https://github.com/eirikbell/monsterbutikken
+* monstershopen c#: https://github.com/eirikbell/monstershopen.net
 * slides from presentation: http://goo.gl/G1U9HS  
