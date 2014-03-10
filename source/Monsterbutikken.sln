@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monsterbutikken", "Monsterbutikken\Monsterbutikken.csproj", "{0F43AC8C-2A48-4BDF-8985-0E4D6A9B6E7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monsterbutikken.UnitTests", "Monsterbutikken.UnitTests\Monsterbutikken.UnitTests.csproj", "{E5D0D35C-3593-457C-B4EA-9977A504432F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A4FADFCB-47B4-4CC7-8965-6922D43524A8}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F43AC8C-2A48-4BDF-8985-0E4D6A9B6E7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F43AC8C-2A48-4BDF-8985-0E4D6A9B6E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F43AC8C-2A48-4BDF-8985-0E4D6A9B6E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F43AC8C-2A48-4BDF-8985-0E4D6A9B6E7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5D0D35C-3593-457C-B4EA-9977A504432F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5D0D35C-3593-457C-B4EA-9977A504432F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5D0D35C-3593-457C-B4EA-9977A504432F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5D0D35C-3593-457C-B4EA-9977A504432F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

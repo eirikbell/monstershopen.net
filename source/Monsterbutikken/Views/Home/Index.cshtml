@@ -1,0 +1,29 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+          "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="no" ng-app="MonsterShopApp">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>The Monster Shop</title>
+    @Styles.Render("~/Content/css")
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="col-md-8">
+            <img class="page-header" src="~/Content/logo.png" alt="The Monster Shop">
+            <ng-view></ng-view>
+        </div>
+    </div>
+
+</body>
+
+@Scripts.Render("~/bundles/Angular")
+@Scripts.Render("~/bundles/Bootstrap")
+@Scripts.Render("~/bundles/App")
+
+    <!--comment the line below to disable mocking -->
+@*<script src="~/Scripts/app/serverMock.js"></script>*@
+
+</html>
