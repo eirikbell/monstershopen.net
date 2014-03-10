@@ -1,4 +1,4 @@
-![Event Sourcing](src/main/webapp/img/logo.png "The Monster Shop")
+![Event Sourcing](source/Monsterbutikken/Content/logo.png "The Monster Shop")
 ================
 
 Need monsters to populate the dungeons of your secret lair? The Monster Shop provides the internets best selection of foul beasts and terrifying horrors, all accessible through a user friendly webpage.
