@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A4FADF
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModel", "DomainModel\DomainModel.csproj", "{74661AC3-550C-49A2-9FC7-07897AB4497B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{EAFE8CCC-A72E-402D-AAA3-7F1FF9B285CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +32,14 @@ Global
 		{E5D0D35C-3593-457C-B4EA-9977A504432F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5D0D35C-3593-457C-B4EA-9977A504432F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5D0D35C-3593-457C-B4EA-9977A504432F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74661AC3-550C-49A2-9FC7-07897AB4497B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74661AC3-550C-49A2-9FC7-07897AB4497B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74661AC3-550C-49A2-9FC7-07897AB4497B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74661AC3-550C-49A2-9FC7-07897AB4497B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAFE8CCC-A72E-402D-AAA3-7F1FF9B285CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAFE8CCC-A72E-402D-AAA3-7F1FF9B285CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAFE8CCC-A72E-402D-AAA3-7F1FF9B285CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAFE8CCC-A72E-402D-AAA3-7F1FF9B285CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

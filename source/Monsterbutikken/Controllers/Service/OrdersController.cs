@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
+using DataLayer;
+using DomainModel;
+using Microsoft.Ajax.Utilities;
 using Monsterbutikken.Models;
 using WebGrease.Css.Extensions;
 
@@ -29,6 +33,17 @@ namespace Monsterbutikken.Controllers.Service
         {
             var basketItems = BasketController.BasketItems;
 
+            using (var context = new MonsterContext())
+            {
+                var order = new Order
+                {
+                    OrderId = Guid.NewGuid(),
+                    Date = DateTime.Now,
+                    Sum = basketItems.Sum(ol => ol.number*ol.price) /*,
+                    OrderLines = basketItems.Select(item => new OrderLine{})*/
+                };
+            }
+
             Orders.Add(Guid.NewGuid(), new OrderJson
             {
                 date = DateTime.Now,
@@ -51,7 +66,22 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public IDictionary<Guid, OrderJson> Get()
         {
-            return Orders;
+            using (var context = new MonsterContext())
+            {
+                return context.Orders.Include(o => o.OrderLines.Select(ol => ol.Monster)).ToDictionary(o => o.OrderId,
+                    o =>
+                        new OrderJson
+                        {
+                            date = o.Date,
+                            sum = o.Sum,
+                            orderLineItems =
+                                o.OrderLines.Select(
+                                    ol => new OrderLineItemJson {name = ol.Name, number = ol.Quantity, price = ol.Price})
+                                    .ToList()
+                        });
+            }
+
+            //return Orders;
         }
 
         /// <summary>
@@ -63,7 +93,20 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public OrderJson Get(Guid id)
         {
-            return Orders[id];
+            using (var context = new MonsterContext())
+            {
+                var order =
+                    context.Orders.Include(o => o.OrderLines.Select(ol => ol.Monster))
+                        .FirstOrDefault(o => o.OrderId == id);
+
+                return new OrderJson
+                {
+                    date = order.Date,
+                    sum = order.Sum,
+                    orderLineItems = order.OrderLines.Select(ol => new OrderLineItemJson{name = ol.Name, number = ol.Quantity, price = ol.Price}).ToList()
+                };
+            }
+            //return Orders[id];
         }
     }
 }

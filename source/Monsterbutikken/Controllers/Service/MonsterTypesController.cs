@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
+using DataLayer;
+using DomainModel;
 using Monsterbutikken.Models;
 
 namespace Monsterbutikken.Controllers.Service
@@ -14,7 +18,11 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public IEnumerable<MonsterJson> Get()
         {
-            return MosterTypeRepo.MonsterList;
+            using (var context = new MonsterContext())
+            {
+                return context.Monsters.Select(m => new MonsterJson {name = m.Name, price = m.Price});
+            }
+            //return MosterTypeRepo.MonsterList;
         }
     }
 }

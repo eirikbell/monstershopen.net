@@ -38,26 +38,26 @@ namespace Monsterbutikken.Controllers.Service
         [HttpPost]
         public IHttpActionResult Add(string name)
         {
-            var ordreLinje = BasketItems.SingleOrDefault(ol => ol.name == name);
+            var orderLine = BasketItems.SingleOrDefault(ol => ol.name == name);
 
-            if (ordreLinje == null)
+            if (orderLine == null)
             {
                 var monster = MosterTypeRepo.GetMonster(name);
                 if (monster == null)
                     return BadRequest();
 
-                ordreLinje = new BasketItemJson
+                orderLine = new BasketItemJson
                 {
                     name = name,
                     number = 1,
                     price = monster.price
                 };
 
-                BasketItems.Add(ordreLinje);
+                BasketItems.Add(orderLine);
             }
             else
             {
-                ordreLinje.number++;
+                orderLine.number++;
             }
 
             return Ok();
@@ -72,16 +72,16 @@ namespace Monsterbutikken.Controllers.Service
         [HttpPost]
         public IHttpActionResult Remove(string name)
         {
-            var ordreLinje = BasketItems.SingleOrDefault(ol => ol.name == name);
+            var orderLine = BasketItems.SingleOrDefault(ol => ol.name == name);
 
-            if (ordreLinje == null)
+            if (orderLine == null)
                 return Ok();
 
-            ordreLinje.number--;
+            orderLine.number--;
 
-            if (ordreLinje.number <= 0)
+            if (orderLine.number <= 0)
             {
-                BasketItems.Remove(ordreLinje);
+                BasketItems.Remove(orderLine);
             }
 
             return Ok();
