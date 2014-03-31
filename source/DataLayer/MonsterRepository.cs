@@ -8,7 +8,7 @@ namespace DataLayer
 {
     public class MonsterRepository : IMonsterRepository
     {
-        private readonly MonsterContext _context;
+        private readonly IMonsterContext _context;
 
         public MonsterRepository()
         {

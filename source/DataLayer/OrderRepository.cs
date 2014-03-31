@@ -9,7 +9,7 @@ namespace DataLayer
 {
     public class OrderRepository : IOrderRepository
     {
-        private readonly MonsterContext _context;
+        private readonly IMonsterContext _context;
 
         public OrderRepository()
         {
@@ -39,15 +39,12 @@ namespace DataLayer
             {
                 if (orderLine.OrderLineId == default(int))
                 {
-                    _context.Entry(orderLine).State = EntityState.Added;
+                    _context.SetAdded(orderLine);
                 }
                 else
                 {
                     _context.OrderLines.Add(orderLine);
-
-                    var state = StateHelpers.ConvertState(orderLine);
-
-                    _context.Entry(orderLine).State = state;
+                    _context.SetState(orderLine, orderLine.State);
                 }
             }
         }
@@ -56,15 +53,13 @@ namespace DataLayer
         {
             if (entity.OrderId == default(Guid))
             {
-                _context.Entry(entity).State = EntityState.Added;
+                entity.OrderId = Guid.NewGuid();
+                _context.SetAdded(entity);
             }
             else
             {
                 _context.Orders.Add(entity);
-
-                var state = StateHelpers.ConvertState(entity);
-
-                _context.Entry(entity).State = state;
+                _context.SetState(entity, entity.State);
             }
         }
 

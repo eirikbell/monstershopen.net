@@ -49,8 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntityMapping\MonsterMapping.cs" />
+    <Compile Include="Interfaces\IContext.cs" />
     <Compile Include="Interfaces\IEditableEntityRepository.cs" />
     <Compile Include="Interfaces\IEntityRepository.cs" />
+    <Compile Include="Interfaces\IMonsterContext.cs" />
     <Compile Include="Interfaces\IMonsterRepository.cs" />
     <Compile Include="Interfaces\IOrderRepository.cs" />
     <Compile Include="OrderRepository.cs" />
