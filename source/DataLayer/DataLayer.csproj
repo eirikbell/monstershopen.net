@@ -48,12 +48,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityMapping\MonsterMapping.cs" />
     <Compile Include="Migrations\201403310544311_MonsterShop.cs" />
     <Compile Include="Migrations\201403310544311_MonsterShop.Designer.cs">
       <DependentUpon>201403310544311_MonsterShop.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterContext.cs" />
+    <Compile Include="EntityMapping\OrderMapping.cs" />
+    <Compile Include="EntityMapping\OrderLineMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
