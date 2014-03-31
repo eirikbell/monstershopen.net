@@ -5,9 +5,7 @@ using System.Linq;
 using System.Web.Http;
 using DataLayer;
 using DomainModel;
-using Microsoft.Ajax.Utilities;
 using Monsterbutikken.Models;
-using WebGrease.Css.Extensions;
 
 namespace Monsterbutikken.Controllers.Service
 {
@@ -39,19 +37,36 @@ namespace Monsterbutikken.Controllers.Service
                 {
                     OrderId = Guid.NewGuid(),
                     Date = DateTime.Now,
-                    Sum = basketItems.Sum(ol => ol.number*ol.price) /*,
-                    OrderLines = basketItems.Select(item => new OrderLine{})*/
+                    Sum = basketItems.Sum(ol => ol.number*ol.price)
                 };
-            }
 
-            Orders.Add(Guid.NewGuid(), new OrderJson
-            {
-                date = DateTime.Now,
-                sum = basketItems.Sum(ol => ol.number*ol.price),
-                orderLineItems =
-                    basketItems.Select(
-                        item => new OrderLineItemJson {name = item.name, number = item.number, price = item.price}).ToList()
-            });
+                foreach (var basketItem in basketItems)
+                {
+                    var monster =
+                        context.Monsters.SingleOrDefault(
+                            m => m.Name.Equals(basketItem.name, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (monster != null)
+                    {
+                        var orderLine = new OrderLine
+                                    {
+                                        Price = basketItem.price,
+                                        Quantity = basketItem.number,
+                                        Monster = monster,
+                                        MonsterId = monster.MonsterId
+                                    };
+
+                        order.AddOrderLine(orderLine); 
+                    }
+                    else
+                    {
+                        return Conflict();
+                    }
+                }
+
+                context.Orders.Add(order);
+                context.SaveChanges();
+            }
 
             BasketController.BasketItems.Clear();
 
@@ -76,7 +91,7 @@ namespace Monsterbutikken.Controllers.Service
                             sum = o.Sum,
                             orderLineItems =
                                 o.OrderLines.Select(
-                                    ol => new OrderLineItemJson {name = ol.Name, number = ol.Quantity, price = ol.Price})
+                                    ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price })
                                     .ToList()
                         });
             }
@@ -99,14 +114,18 @@ namespace Monsterbutikken.Controllers.Service
                     context.Orders.Include(o => o.OrderLines.Select(ol => ol.Monster))
                         .FirstOrDefault(o => o.OrderId == id);
 
-                return new OrderJson
+                if (order != null)
                 {
-                    date = order.Date,
-                    sum = order.Sum,
-                    orderLineItems = order.OrderLines.Select(ol => new OrderLineItemJson{name = ol.Name, number = ol.Quantity, price = ol.Price}).ToList()
-                };
+                    return new OrderJson
+                            {
+                                date = order.Date,
+                                sum = order.Sum,
+                                orderLineItems = order.OrderLines.Select(ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price }).ToList()
+                            }; 
+                }
+
+                return null;
             }
-            //return Orders[id];
         }
     }
 }

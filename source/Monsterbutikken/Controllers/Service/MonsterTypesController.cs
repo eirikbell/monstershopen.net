@@ -20,9 +20,10 @@ namespace Monsterbutikken.Controllers.Service
         {
             using (var context = new MonsterContext())
             {
-                return context.Monsters.Select(m => new MonsterJson {name = m.Name, price = m.Price});
+                var monsters = context.Monsters.Select(m => new MonsterJson {name = m.Name, price = m.Price}).ToList();
+
+                return monsters;
             }
-            //return MosterTypeRepo.MonsterList;
         }
     }
 }
