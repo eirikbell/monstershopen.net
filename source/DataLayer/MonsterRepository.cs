@@ -10,9 +10,9 @@ namespace DataLayer
     {
         private readonly IMonsterContext _context;
 
-        public MonsterRepository()
+        public MonsterRepository(IMonsterContext context)
         {
-            _context = new MonsterContext();
+            _context = context;
         }
 
         public Monster Find(int entityId)

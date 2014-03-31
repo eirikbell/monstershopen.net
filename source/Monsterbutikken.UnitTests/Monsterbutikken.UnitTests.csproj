@@ -39,6 +39,9 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -76,12 +79,17 @@
     <Compile Include="Infrastructure\RouteTester.cs" />
     <Compile Include="Infrastructure\WebApiRequestResult.cs" />
     <Compile Include="MonsterFakeDbSet.cs" />
+    <Compile Include="MonsterRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestDataBuilders\ITestDataBuilder.cs" />
     <Compile Include="TestDataBuilders\UrlStringBuilder.cs" />
     <Compile Include="WebApiConfigTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj">
+      <Project>{eafe8ccc-a72e-402d-aaa3-7f1ff9b285cd}</Project>
+      <Name>DataLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DomainModel\DomainModel.csproj">
       <Project>{74661ac3-550c-49a2-9fc7-07897ab4497b}</Project>
       <Name>DomainModel</Name>

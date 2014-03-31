@@ -11,9 +11,9 @@ namespace DataLayer
     {
         private readonly IMonsterContext _context;
 
-        public OrderRepository()
+        public OrderRepository(IMonsterContext context)
         {
-            _context = new MonsterContext();
+            _context = context;
         }
 
         private IQueryable<Order> Orders
