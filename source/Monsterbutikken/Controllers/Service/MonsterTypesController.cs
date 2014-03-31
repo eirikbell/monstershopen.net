@@ -1,15 +1,20 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using DataLayer;
-using DomainModel;
+using DataLayer.Interfaces;
 using Monsterbutikken.Models;
 
 namespace Monsterbutikken.Controllers.Service
 {
     public class MonsterTypesController : ApiController
     {
+        private readonly IMonsterRepository _monsterRepository;
+
+        public MonsterTypesController(IMonsterRepository monsterRepository)
+        {
+            _monsterRepository = monsterRepository;
+        }
+
         /// <summary>
         /// Gets all available monster types
         /// </summary>
@@ -18,12 +23,13 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public IEnumerable<MonsterJson> Get()
         {
-            using (var context = new MonsterContext())
+            var monsters = _monsterRepository.All;
+            if (monsters != null)
             {
-                var monsters = context.Monsters.Select(m => new MonsterJson {name = m.Name, price = m.Price}).ToList();
-
-                return monsters;
+                return monsters.Select(m => new MonsterJson { name = m.Name, price = m.Price }).ToList();
             }
+
+            return new List<MonsterJson>();
         }
     }
 }

@@ -48,13 +48,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityMapping\MonsterMapping.cs" />
+    <Compile Include="Interfaces\IContext.cs" />
+    <Compile Include="Interfaces\IEditableEntityRepository.cs" />
+    <Compile Include="Interfaces\IEntityRepository.cs" />
+    <Compile Include="Interfaces\IMonsterContext.cs" />
+    <Compile Include="Interfaces\IMonsterRepository.cs" />
+    <Compile Include="Interfaces\IOrderRepository.cs" />
+    <Compile Include="OrderRepository.cs" />
+    <Compile Include="MonsterRepository.cs" />
     <Compile Include="Migrations\201403310544311_MonsterShop.cs" />
     <Compile Include="Migrations\201403310544311_MonsterShop.Designer.cs">
       <DependentUpon>201403310544311_MonsterShop.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MonsterContext.cs" />
+    <Compile Include="EntityMapping\OrderMapping.cs" />
+    <Compile Include="EntityMapping\OrderLineMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StateHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

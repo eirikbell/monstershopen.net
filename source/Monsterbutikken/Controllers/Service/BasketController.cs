@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using DataLayer;
+using DataLayer.Interfaces;
 using Monsterbutikken.Models;
 
 namespace Monsterbutikken.Controllers.Service
 {
     public class BasketController : MonsterShopController
     {
-        public BasketController()
+        private readonly IMonsterRepository _monsterRepository;
+
+        public BasketController(IMonsterRepository monsterRepository)
         {
+            _monsterRepository = monsterRepository;
+
             if (BasketItems == null)
             {
                 BasketItems = new List<BasketItemJson>();
@@ -40,29 +43,26 @@ namespace Monsterbutikken.Controllers.Service
         [HttpPost]
         public IHttpActionResult Add(string name)
         {
-            using (var context = new MonsterContext())
+            var orderLine = BasketItems.SingleOrDefault(ol => ol.name == name);
+
+            if (orderLine == null)
             {
-                var orderLine = BasketItems.SingleOrDefault(ol => ol.name == name);
+                var monster = _monsterRepository.FindByName(name);
+                if (monster == null)
+                    return BadRequest();
 
-                if (orderLine == null)
+                orderLine = new BasketItemJson
                 {
-                    var monster = context.Monsters.FirstOrDefault(m => m.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-                    if (monster == null)
-                        return BadRequest();
+                    name = name,
+                    number = 1,
+                    price = monster.Price
+                };
 
-                    orderLine = new BasketItemJson
-                    {
-                        name = name,
-                        number = 1,
-                        price = monster.Price
-                    };
-
-                    BasketItems.Add(orderLine);
-                }
-                else
-                {
-                    orderLine.number++;
-                }
+                BasketItems.Add(orderLine);
+            }
+            else
+            {
+                orderLine.number++;
             }
 
             return Ok();
@@ -100,7 +100,7 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public BasketSumJson Sum()
         {
-            return new BasketSumJson {sum = BasketItems.Sum(ol => ol.number*ol.price)};
+            return new BasketSumJson { sum = BasketItems.Sum(ol => ol.number * ol.price) };
         }
     }
 }

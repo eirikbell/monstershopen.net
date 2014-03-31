@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
-using DataLayer;
+using DataLayer.Interfaces;
 using DomainModel;
 using Monsterbutikken.Models;
 
@@ -11,15 +10,14 @@ namespace Monsterbutikken.Controllers.Service
 {
     public class OrdersController : ApiController
     {
-        public OrdersController()
-        {
-            if (Orders == null)
-            {
-                Orders = new Dictionary<Guid, OrderJson>();
-            }
-        }
+        private readonly IMonsterRepository _monsterRepository;
+        private readonly IOrderRepository _orderRepository;
 
-        public static IDictionary<Guid, OrderJson> Orders { get; set; }
+        public OrdersController(IMonsterRepository monsterRepository, IOrderRepository orderRepository)
+        {
+            _monsterRepository = monsterRepository;
+            _orderRepository = orderRepository;
+        }
 
         /// <summary>
         /// Submits a new order for the current customer
@@ -31,42 +29,39 @@ namespace Monsterbutikken.Controllers.Service
         {
             var basketItems = BasketController.BasketItems;
 
-            using (var context = new MonsterContext())
+            var order = new Order
+                    {
+                        OrderId = Guid.NewGuid(),
+                        Date = DateTime.Now,
+                        Sum = basketItems.Sum(ol => ol.number * ol.price),
+                        State = State.Added
+                    };
+
+            foreach (var basketItem in basketItems)
             {
-                var order = new Order
+                var monster = _monsterRepository.FindByName(basketItem.name);
+
+                if (monster != null)
                 {
-                    OrderId = Guid.NewGuid(),
-                    Date = DateTime.Now,
-                    Sum = basketItems.Sum(ol => ol.number*ol.price)
-                };
-
-                foreach (var basketItem in basketItems)
-                {
-                    var monster =
-                        context.Monsters.SingleOrDefault(
-                            m => m.Name.Equals(basketItem.name, StringComparison.InvariantCultureIgnoreCase));
-
-                    if (monster != null)
+                    var orderLine = new OrderLine
                     {
-                        var orderLine = new OrderLine
-                                    {
-                                        Price = basketItem.price,
-                                        Quantity = basketItem.number,
-                                        Monster = monster,
-                                        MonsterId = monster.MonsterId
-                                    };
+                        Price = basketItem.price,
+                        Quantity = basketItem.number,
+                        Monster = monster,
+                        MonsterId = monster.MonsterId,
+                        State = State.Added
+                    };
 
-                        order.AddOrderLine(orderLine); 
-                    }
-                    else
-                    {
-                        return Conflict();
-                    }
+                    order.AddOrderLine(orderLine);
                 }
-
-                context.Orders.Add(order);
-                context.SaveChanges();
+                else
+                {
+                    return Conflict();
+                }
             }
+
+            _orderRepository.InsertOrUpdateGraph(order);
+            _orderRepository.Save();
 
             BasketController.BasketItems.Clear();
 
@@ -81,22 +76,24 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public IDictionary<Guid, OrderJson> Get()
         {
-            using (var context = new MonsterContext())
+            var orders = _orderRepository.All;
+
+            if (orders != null)
             {
-                return context.Orders.Include(o => o.OrderLines.Select(ol => ol.Monster)).ToDictionary(o => o.OrderId,
-                    o =>
-                        new OrderJson
-                        {
-                            date = o.Date,
-                            sum = o.Sum,
-                            orderLineItems =
-                                o.OrderLines.Select(
-                                    ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price })
-                                    .ToList()
-                        });
+                return orders.ToDictionary(o => o.OrderId,
+                o =>
+                    new OrderJson
+                    {
+                        date = o.Date,
+                        sum = o.Sum,
+                        orderLineItems =
+                            o.OrderLines.Select(
+                                ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price })
+                                .ToList()
+                    });
             }
 
-            //return Orders;
+            return new Dictionary<Guid, OrderJson>();
         }
 
         /// <summary>
@@ -108,24 +105,19 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public OrderJson Get(Guid id)
         {
-            using (var context = new MonsterContext())
+            var order = _orderRepository.Find(id);
+
+            if (order != null)
             {
-                var order =
-                    context.Orders.Include(o => o.OrderLines.Select(ol => ol.Monster))
-                        .FirstOrDefault(o => o.OrderId == id);
-
-                if (order != null)
+                return new OrderJson
                 {
-                    return new OrderJson
-                            {
-                                date = order.Date,
-                                sum = order.Sum,
-                                orderLineItems = order.OrderLines.Select(ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price }).ToList()
-                            }; 
-                }
-
-                return null;
+                    date = order.Date,
+                    sum = order.Sum,
+                    orderLineItems = order.OrderLines.Select(ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price }).ToList()
+                };
             }
+
+            return null;
         }
     }
 }
