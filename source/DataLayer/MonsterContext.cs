@@ -18,8 +18,6 @@ namespace DataLayer
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Ignore<Basket>();
-            modelBuilder.Ignore<BasketItem>();
             modelBuilder.Configurations.Add(new MonsterMapping());
             modelBuilder.Configurations.Add(new OrderMapping());
             modelBuilder.Configurations.Add(new OrderLineMapping());
