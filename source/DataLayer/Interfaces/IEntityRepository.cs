@@ -4,10 +4,10 @@ using DomainModel;
 
 namespace DataLayer.Interfaces
 {
-    public interface IEntityRepository<TEntity> : IDisposable
+    public interface IEntityRepository<TEntity, in TEntityKeyType> : IDisposable
         where TEntity : IObjectWithState
     {
-        TEntity Find(int entityId);
+        TEntity Find(TEntityKeyType entityId);
         ICollection<TEntity> All { get; }
     }
 }

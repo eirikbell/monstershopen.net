@@ -2,7 +2,7 @@
 
 namespace DomainModel
 {
-    public class OrderLine
+    public class OrderLine : IObjectWithState
     {
         public int OrderLineId { get; set; }
         public int Quantity { get; set; }
@@ -23,5 +23,7 @@ namespace DomainModel
 
         public Guid OrderId { get; set; }
         public virtual Order Order { get; set; }
+
+        public State State { get; set; }
     }
 }

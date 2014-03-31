@@ -18,6 +18,8 @@ namespace DataLayer.EntityMapping
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(m => m.Name).HasColumnName("MonsterName").IsRequired().HasMaxLength(50);
             Property(m => m.Price).HasColumnName("PurchasePrice").IsRequired();
+
+            Ignore(m => m.State);
         }
     }
 }

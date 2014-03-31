@@ -14,6 +14,8 @@ namespace DataLayer.EntityMapping
             Property(o => o.OrderId).HasColumnName("OrderGuid").IsRequired();
             Property(o => o.Date).HasColumnName("OrderDate").IsRequired();
             Property(o => o.Sum).HasColumnName("Sum").IsRequired();
+
+            Ignore(o => o.State);
         }
     }
 }

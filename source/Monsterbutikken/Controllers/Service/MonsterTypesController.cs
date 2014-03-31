@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using DataLayer;
+using DataLayer.Interfaces;
 using DomainModel;
 using Monsterbutikken.Models;
 
@@ -18,11 +19,15 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public IEnumerable<MonsterJson> Get()
         {
-            using (var context = new MonsterContext())
+            using (IMonsterRepository repo = new MonsterRepository())
             {
-                var monsters = context.Monsters.Select(m => new MonsterJson {name = m.Name, price = m.Price}).ToList();
+                var monsters = repo.All;
+                if (monsters != null)
+                {
+                    return monsters.Select(m => new MonsterJson {name = m.Name, price = m.Price}).ToList();
+                }
 
-                return monsters;
+                return new List<MonsterJson>();
             }
         }
     }

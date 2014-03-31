@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DomainModel
 {
-    public class Order
+    public class Order : IObjectWithState
     {
         public Order()
         {
@@ -23,5 +23,7 @@ namespace DomainModel
             orderLine.Order = this;
             OrderLines.Add(orderLine);
         }
+
+        public State State { get; set; }
     }
 }

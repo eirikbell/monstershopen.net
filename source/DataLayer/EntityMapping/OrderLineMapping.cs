@@ -26,6 +26,7 @@ namespace DataLayer.EntityMapping
 
             Ignore(ol => ol.Name);
             Ignore(ol => ol.Sum);
+            Ignore(ol => ol.State);
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
 using DataLayer;
+using DataLayer.Interfaces;
 using DomainModel;
 using Monsterbutikken.Models;
 
@@ -31,41 +31,44 @@ namespace Monsterbutikken.Controllers.Service
         {
             var basketItems = BasketController.BasketItems;
 
-            using (var context = new MonsterContext())
+            using (IOrderRepository repo = new OrderRepository())
             {
-                var order = new Order
+                using (IMonsterRepository monsterRepo = new MonsterRepository())
                 {
-                    OrderId = Guid.NewGuid(),
-                    Date = DateTime.Now,
-                    Sum = basketItems.Sum(ol => ol.number*ol.price)
-                };
+                    var order = new Order
+                            {
+                                OrderId = Guid.NewGuid(),
+                                Date = DateTime.Now,
+                                Sum = basketItems.Sum(ol => ol.number * ol.price),
+                                State = State.Added
+                            };
 
-                foreach (var basketItem in basketItems)
-                {
-                    var monster =
-                        context.Monsters.SingleOrDefault(
-                            m => m.Name.Equals(basketItem.name, StringComparison.InvariantCultureIgnoreCase));
-
-                    if (monster != null)
+                    foreach (var basketItem in basketItems)
                     {
-                        var orderLine = new OrderLine
-                                    {
-                                        Price = basketItem.price,
-                                        Quantity = basketItem.number,
-                                        Monster = monster,
-                                        MonsterId = monster.MonsterId
-                                    };
+                        var monster = monsterRepo.FindByName(basketItem.name);
 
-                        order.AddOrderLine(orderLine); 
+                        if (monster != null)
+                        {
+                            var orderLine = new OrderLine
+                            {
+                                Price = basketItem.price,
+                                Quantity = basketItem.number,
+                                Monster = monster,
+                                MonsterId = monster.MonsterId,
+                                State = State.Added
+                            };
+
+                            order.AddOrderLine(orderLine);
+                        }
+                        else
+                        {
+                            return Conflict();
+                        }
                     }
-                    else
-                    {
-                        return Conflict();
-                    }
+
+                    repo.InsertOrUpdateGraph(order);
+                    repo.Save();
                 }
-
-                context.Orders.Add(order);
-                context.SaveChanges();
             }
 
             BasketController.BasketItems.Clear();
@@ -81,9 +84,13 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public IDictionary<Guid, OrderJson> Get()
         {
-            using (var context = new MonsterContext())
+            using (IOrderRepository repo = new OrderRepository())
             {
-                return context.Orders.Include(o => o.OrderLines.Select(ol => ol.Monster)).ToDictionary(o => o.OrderId,
+                var orders = repo.All;
+
+                if (orders != null)
+                {
+                    return orders.ToDictionary(o => o.OrderId,
                     o =>
                         new OrderJson
                         {
@@ -94,9 +101,10 @@ namespace Monsterbutikken.Controllers.Service
                                     ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price })
                                     .ToList()
                         });
-            }
+                }
 
-            //return Orders;
+                return new Dictionary<Guid, OrderJson>();
+            }
         }
 
         /// <summary>
@@ -108,20 +116,18 @@ namespace Monsterbutikken.Controllers.Service
         [HttpGet]
         public OrderJson Get(Guid id)
         {
-            using (var context = new MonsterContext())
+            using (IOrderRepository repo = new OrderRepository())
             {
-                var order =
-                    context.Orders.Include(o => o.OrderLines.Select(ol => ol.Monster))
-                        .FirstOrDefault(o => o.OrderId == id);
+                var order = repo.Find(id);
 
                 if (order != null)
                 {
                     return new OrderJson
-                            {
-                                date = order.Date,
-                                sum = order.Sum,
-                                orderLineItems = order.OrderLines.Select(ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price }).ToList()
-                            }; 
+                    {
+                        date = order.Date,
+                        sum = order.Sum,
+                        orderLineItems = order.OrderLines.Select(ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price }).ToList()
+                    };
                 }
 
                 return null;
