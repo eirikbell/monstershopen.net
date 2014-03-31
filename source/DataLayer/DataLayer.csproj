@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntityMapping\MonsterMapping.cs" />
+    <Compile Include="Interfaces\IEditableEntityRepository.cs" />
+    <Compile Include="Interfaces\IEntityRepository.cs" />
     <Compile Include="Migrations\201403310544311_MonsterShop.cs" />
     <Compile Include="Migrations\201403310544311_MonsterShop.Designer.cs">
       <DependentUpon>201403310544311_MonsterShop.cs</DependentUpon>
