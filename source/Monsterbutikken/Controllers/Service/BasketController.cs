@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using DataLayer;
+using DataLayer.Interfaces;
 using Monsterbutikken.Models;
 
 namespace Monsterbutikken.Controllers.Service
@@ -40,13 +41,13 @@ namespace Monsterbutikken.Controllers.Service
         [HttpPost]
         public IHttpActionResult Add(string name)
         {
-            using (var context = new MonsterContext())
+            using (IMonsterRepository repo = new MonsterRepository())
             {
                 var orderLine = BasketItems.SingleOrDefault(ol => ol.name == name);
 
                 if (orderLine == null)
                 {
-                    var monster = context.Monsters.FirstOrDefault(m => m.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+                    var monster = repo.FindByName(name);
                     if (monster == null)
                         return BadRequest();
 
