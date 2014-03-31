@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using DataLayer;
+using DataLayer.Interfaces;
 using Monsterbutikken.Models;
 
 namespace Monsterbutikken.Controllers.Service
@@ -38,26 +41,29 @@ namespace Monsterbutikken.Controllers.Service
         [HttpPost]
         public IHttpActionResult Add(string name)
         {
-            var orderLine = BasketItems.SingleOrDefault(ol => ol.name == name);
-
-            if (orderLine == null)
+            using (IMonsterRepository repo = new MonsterRepository())
             {
-                var monster = MosterTypeRepo.GetMonster(name);
-                if (monster == null)
-                    return BadRequest();
+                var orderLine = BasketItems.SingleOrDefault(ol => ol.name == name);
 
-                orderLine = new BasketItemJson
+                if (orderLine == null)
                 {
-                    name = name,
-                    number = 1,
-                    price = monster.price
-                };
+                    var monster = repo.FindByName(name);
+                    if (monster == null)
+                        return BadRequest();
 
-                BasketItems.Add(orderLine);
-            }
-            else
-            {
-                orderLine.number++;
+                    orderLine = new BasketItemJson
+                    {
+                        name = name,
+                        number = 1,
+                        price = monster.Price
+                    };
+
+                    BasketItems.Add(orderLine);
+                }
+                else
+                {
+                    orderLine.number++;
+                }
             }
 
             return Ok();
