@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using DomainModel;
 
-namespace DataLayer.Interfaces
+namespace DataLayer.Contract
 {
     public interface IEntityRepository<TEntity, in TEntityKeyType> : IDisposable
         where TEntity : IObjectWithState

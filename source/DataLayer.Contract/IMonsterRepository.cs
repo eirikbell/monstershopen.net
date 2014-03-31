@@ -1,6 +1,6 @@
 ﻿using DomainModel;
 
-namespace DataLayer.Interfaces
+namespace DataLayer.Contract
 {
     public interface IMonsterRepository : IEntityRepository<Monster, int>
     {

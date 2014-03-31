@@ -1,7 +1,7 @@
 ﻿using System;
 using DomainModel;
 
-namespace DataLayer.Interfaces
+namespace DataLayer.Contract
 {
     public interface IOrderRepository : IEditableEntityRepository<Order, Guid>
     {
