@@ -475,6 +475,10 @@
     <Content Include="Scripts\version.json" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataLayer.Contract\DataLayer.Contract.csproj">
+      <Project>{cd156f22-f878-4b65-8daf-317978a63baf}</Project>
+      <Name>DataLayer.Contract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj">
       <Project>{eafe8ccc-a72e-402d-aaa3-7f1ff9b285cd}</Project>
       <Name>DataLayer</Name>

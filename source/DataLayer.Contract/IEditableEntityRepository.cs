@@ -1,6 +1,6 @@
 ﻿using DomainModel;
 
-namespace DataLayer.Interfaces
+namespace DataLayer.Contract
 {
     public interface IEditableEntityRepository<TEntity, in TEntityKeyType> : IEntityRepository<TEntity, TEntityKeyType>
         where TEntity : IObjectWithState

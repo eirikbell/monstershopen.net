@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using DataLayer.Contract;
 using DataLayer.Interfaces;
 using Monsterbutikken.Models;
 

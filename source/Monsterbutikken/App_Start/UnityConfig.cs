@@ -1,4 +1,5 @@
 using DataLayer;
+using DataLayer.Contract;
 using DataLayer.Interfaces;
 using Microsoft.Practices.Unity;
 using System.Web.Http;
