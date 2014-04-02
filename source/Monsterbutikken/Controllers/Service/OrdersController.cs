@@ -11,16 +11,6 @@ namespace Monsterbutikken.Controllers.Service
 {
     public class OrdersController : ApiController
     {
-        public OrdersController()
-        {
-            if (Orders == null)
-            {
-                Orders = new Dictionary<Guid, OrderJson>();
-            }
-        }
-
-        public static IDictionary<Guid, OrderJson> Orders { get; set; }
-
         /// <summary>
         /// Submits a new order for the current customer
         /// </summary>
