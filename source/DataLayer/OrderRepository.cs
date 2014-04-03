@@ -54,11 +54,19 @@ namespace DataLayer
 
         public void InsertOrUpdate(Order entity)
         {
-            _context.Orders.Add(entity);
+            if (entity.OrderId == default(Guid))
+            {
+                entity.OrderId = Guid.NewGuid();
+                _context.Entry(entity).State = EntityState.Added;
+            }
+            else
+            {
+                _context.Orders.Add(entity);
 
-            var state = StateHelpers.ConvertState(entity);
+                var state = StateHelpers.ConvertState(entity);
 
-            _context.Entry(entity).State = state;
+                _context.Entry(entity).State = state;
+            }
         }
 
         public void Delete(Guid entityId)
