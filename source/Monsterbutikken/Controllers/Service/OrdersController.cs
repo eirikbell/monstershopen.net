@@ -29,36 +29,36 @@ namespace Monsterbutikken.Controllers.Service
         {
             var basketItems = BasketController.BasketItems;
 
-            var order = new Order
-                    {
-                        OrderId = Guid.NewGuid(),
-                        Date = DateTime.Now,
-                        Sum = basketItems.Sum(ol => ol.number * ol.price),
-                        State = State.Added
-                    };
+                    var order = new Order
+                            {
+                                OrderId = Guid.NewGuid(),
+                                Date = DateTime.Now,
+                                Sum = basketItems.Sum(ol => ol.number * ol.price),
+                                State = State.Added
+                            };
 
-            foreach (var basketItem in basketItems)
-            {
+                    foreach (var basketItem in basketItems)
+                    {
                 var monster = _monsterRepository.FindByName(basketItem.name);
 
-                if (monster != null)
-                {
-                    var orderLine = new OrderLine
-                    {
-                        Price = basketItem.price,
-                        Quantity = basketItem.number,
-                        Monster = monster,
-                        MonsterId = monster.MonsterId,
-                        State = State.Added
-                    };
+                        if (monster != null)
+                        {
+                            var orderLine = new OrderLine
+                            {
+                                Price = basketItem.price,
+                                Quantity = basketItem.number,
+                                Monster = monster,
+                                MonsterId = monster.MonsterId,
+                                State = State.Added
+                            };
 
-                    order.AddOrderLine(orderLine);
-                }
-                else
-                {
-                    return Conflict();
-                }
-            }
+                            order.AddOrderLine(orderLine);
+                        }
+                        else
+                        {
+                            return Conflict();
+                        }
+                    }
 
             _orderRepository.InsertOrUpdateGraph(order);
             _orderRepository.Save();
@@ -78,23 +78,23 @@ namespace Monsterbutikken.Controllers.Service
         {
             var orders = _orderRepository.All;
 
-            if (orders != null)
-            {
-                return orders.ToDictionary(o => o.OrderId,
-                o =>
-                    new OrderJson
-                    {
-                        date = o.Date,
-                        sum = o.Sum,
-                        orderLineItems =
-                            o.OrderLines.Select(
-                                ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price })
-                                .ToList()
-                    });
-            }
+                if (orders != null)
+                {
+                    return orders.ToDictionary(o => o.OrderId,
+                    o =>
+                        new OrderJson
+                        {
+                            date = o.Date,
+                            sum = o.Sum,
+                            orderLineItems =
+                                o.OrderLines.Select(
+                                    ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price })
+                                    .ToList()
+                        });
+                }
 
-            return new Dictionary<Guid, OrderJson>();
-        }
+                return new Dictionary<Guid, OrderJson>();
+            }
 
         /// <summary>
         /// Gets a single order
@@ -107,17 +107,17 @@ namespace Monsterbutikken.Controllers.Service
         {
             var order = _orderRepository.Find(id);
 
-            if (order != null)
-            {
-                return new OrderJson
+                if (order != null)
                 {
-                    date = order.Date,
-                    sum = order.Sum,
-                    orderLineItems = order.OrderLines.Select(ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price }).ToList()
-                };
-            }
+                    return new OrderJson
+                    {
+                        date = order.Date,
+                        sum = order.Sum,
+                        orderLineItems = order.OrderLines.Select(ol => new OrderLineItemJson { name = ol.Name, number = ol.Quantity, price = ol.Price }).ToList()
+                    };
+                }
 
-            return null;
+                return null;
+            }
         }
     }
-}
