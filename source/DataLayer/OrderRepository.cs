@@ -24,7 +24,7 @@ namespace DataLayer
 
         public Order Find(Guid entityId)
         {
-            return Orders.FirstOrDefault(o => o.OrderId == entityId);
+            return Orders.SingleOrDefault(o => o.OrderId == entityId);
         }
 
         public ICollection<Order> All
@@ -62,7 +62,6 @@ namespace DataLayer
                 _context.Orders.Add(entity);
                 _context.SetState(entity, entity.State);
             }
-        }
 
         public void Delete(Guid entityId)
         {
