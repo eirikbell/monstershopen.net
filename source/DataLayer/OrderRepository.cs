@@ -62,6 +62,7 @@ namespace DataLayer
                 _context.Orders.Add(entity);
                 _context.SetState(entity, entity.State);
             }
+        }
 
         public void Delete(Guid entityId)
         {
